@@ -1,3 +1,4 @@
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InternalServerErrorException, NotFoundException } from '@nestjs/common/exceptions';
 import { InjectModel } from '@nestjs/mongoose/dist';
@@ -23,9 +24,9 @@ export class PokemonService {
   }
 }
 
-  async findAll() {
-    const pokemon = await this.pokemonModel.find();
-    return pokemon;
+  async findAll(paginationDto: PaginationDto) {
+    const {limit = 10, offset = 0} = paginationDto;
+    return await this.pokemonModel.find().limit(limit).skip(offset).sort({no:1}).select('-__v')
   }
 
   async findOne(term: string) {
