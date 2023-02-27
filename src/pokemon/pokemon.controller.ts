@@ -4,12 +4,17 @@ import { PokemonService } from './pokemon.service';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Pokemon } from './entities/pokemon.entity';
 
+@ApiTags('Pokemon')
 @Controller('pokemon')
 export class PokemonController {
   constructor(private readonly pokemonService: PokemonService) {}
 
   @Post()
+  @ApiResponse({status:201, description:"Pokemon was added", type:Pokemon})
+  @ApiResponse({status:400, description:"Bad Request"})
   create(@Body() createPokemonDto: CreatePokemonDto) {
     return this.pokemonService.create(createPokemonDto);
   }
